@@ -1,0 +1,65 @@
+[gd_scene load_steps=8 format=3 uid="uid://dxkptctyf6g1p"]
+
+[ext_resource type="PackedScene" uid="uid://cvgrnlwhc5lf4" path="res://player.tscn" id="1_3vxwu"]
+[ext_resource type="Script" path="res://main.gd" id="1_6jj7c"]
+[ext_resource type="Script" path="res://Label.gd" id="3_7tk3m"]
+[ext_resource type="AudioStream" uid="uid://ii6dn1p8inlm" path="res://dodge_assets/art/House In a Forest Loop.ogg" id="3_lm27m"]
+[ext_resource type="AudioStream" uid="uid://byr0iq8enrely" path="res://dodge_assets/art/gameover.wav" id="5_ljh71"]
+
+[sub_resource type="Curve2D" id="Curve2D_6irdy"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -11, 5, 0, 0, 0, 0, 1364, 2, 0, 0, 0, 0, 1364, 710, 0, 0, 0, 0, -5, 704, 0, 0, 0, 0, -11, 5)
+}
+point_count = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_44cwn"]
+font_size = 32
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_6jj7c")
+
+[node name="Player" parent="." instance=ExtResource("1_3vxwu")]
+position = Vector2(153, 270)
+speed = 10
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_6irdy")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2(-11, 5.00098)
+rotation = -1.57938
+progress = 4151.04
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 618.0
+offset_top = 4.0
+offset_right = 656.0
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0
+"
+label_settings = SubResource("LabelSettings_44cwn")
+script = ExtResource("3_7tk3m")
+
+[node name="ScoreTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_lm27m")
+autoplay = true
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_ljh71")
+
+[connection signal="area_entered" from="Player" to="Player" method="_on_area_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="Label" method="_on_score_timer_timeout"]
